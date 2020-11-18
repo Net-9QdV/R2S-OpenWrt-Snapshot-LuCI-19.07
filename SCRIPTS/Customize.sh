@@ -36,6 +36,15 @@ cp ${MY_PATH}/../PATCH/modifySSRPlus.sh ./
 bash modifySSRPlus.sh
 popd
 
+# OpenClash
+rm -fr package/new/luci-app-openclash
+git clone -b master --single-branch https://github.com/vernesong/OpenClash package/new/luci-app-openclash
+## 修改 DashBoard 默认地址和密码
+pushd package/new/luci-app-openclash/luci-app-openclash/root/usr/share/openclash/dashboard/static/js
+sed -i 's/n=C(\"externalControllerAddr\",\"127.0.0.1\"),a=C(\"externalControllerPort\",\"9090\"),r=C(\"secret\",\"\")/n=C(\"externalControllerAddr\",\"192.168.1.1\"),a=C(\"externalControllerPort\",\"9090\"),r=C(\"secret\",\"123456\")/' *js
+sed -i 's/hostname:\"127.0.0.1\",port:\"9090\",secret:\"\"/hostname:\"192.168.1.1\",port:\"9090\",secret:\"123456\"/' *js
+popd
+
 # 移除 LuCI 部分页面
 pushd feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d
 rm -fr luci-mod-system.json
@@ -50,3 +59,4 @@ popd
 
 unset MY_PATH
 exit 0
+
