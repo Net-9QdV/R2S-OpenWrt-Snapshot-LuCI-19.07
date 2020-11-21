@@ -32,11 +32,6 @@ uci set uhttpd.main.redirect_https=0
 uci commit uhttpd
 /etc/init.d/uhttpd restart
 
-#network
-#uci set network.globals.packet_steering=1
-#uci commit network
-#/etc/init.d/network restart
-
 #firewall
 uci set firewall.@zone[1].fullcone='1'
 uci commit firewall
@@ -48,6 +43,11 @@ sed -i 's,#USE_SOFTDRIVERS = 2,USE_SOFTDRIVERS = 1,g' /etc/ssl/openssl.cnf
 #dnsmasq
 sed -i '/log-facility/d' /etc/dnsmasq.conf
 echo "log-facility=/dev/null" >> /etc/dnsmasq.conf
+
+#packet_steering
+uci set network.globals.packet_steering='1'
+uci commit network
+
 ln -sf /sbin/ip /usr/bin/ip
 opkg flag hold luci-app-firewall
 opkg flag hold firewall
